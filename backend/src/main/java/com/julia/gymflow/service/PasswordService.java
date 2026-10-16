@@ -3,6 +3,8 @@ package com.julia.gymflow.service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.util.regex.Pattern;
 
 @Service
@@ -26,7 +28,10 @@ public class PasswordService {
 			return encoder.matches(password, storedPassword);
 		}
 
-		return storedPassword.equals(password);
+		return MessageDigest.isEqual(
+				password.getBytes(StandardCharsets.UTF_8),
+				storedPassword.getBytes(StandardCharsets.UTF_8)
+		);
 	}
 
 	public boolean needsRehash(String storedPassword) {
