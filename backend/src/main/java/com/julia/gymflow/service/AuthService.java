@@ -33,10 +33,10 @@ public class AuthService {
 				? ""
 				: request.getEmail().trim().toLowerCase(Locale.ROOT);
 		Usuario usuario = usuarioRepository.findByEmail(email)
-				.orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Usuario no encontrado."));
+				.orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Credenciales incorrectas."));
 
 		if (!passwordService.matches(request.getPassword(), usuario.getPasswordHash())) {
-			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Contrasena incorrecta.");
+			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Credenciales incorrectas.");
 		}
 
 		if (!usuario.isActivo()) {
