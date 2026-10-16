@@ -134,12 +134,12 @@ async function procesarRespuesta(respuesta: Response) {
     let mensajeError = textoError || "Error en la petición al backend";
 
     try {
-      const errorJson = JSON.parse(textoError);
-      mensajeError =
-        errorJson.message ||
-        errorJson.detail ||
-        errorJson.error ||
-        mensajeError;
+      const errorJson = JSON.parse(textoError) as Record<string, unknown>;
+      const candidate =
+        errorJson.message ?? errorJson.detail ?? errorJson.error;
+      if (typeof candidate === "string" && candidate.trim()) {
+        mensajeError = candidate.trim();
+      }
     } catch {
       // Si el backend devuelve texto plano, usamos ese texto directamente.
     }
