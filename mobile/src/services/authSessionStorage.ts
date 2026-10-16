@@ -9,7 +9,11 @@ export async function obtenerTokenSesion(): Promise<string | null> {
     return webMemoryToken;
   }
 
-  return SecureStore.getItemAsync(AUTH_TOKEN_KEY);
+  try {
+    return await SecureStore.getItemAsync(AUTH_TOKEN_KEY);
+  } catch {
+    return null;
+  }
 }
 
 export async function guardarTokenSesion(token: string): Promise<void> {
@@ -18,9 +22,13 @@ export async function guardarTokenSesion(token: string): Promise<void> {
     return;
   }
 
-  await SecureStore.setItemAsync(AUTH_TOKEN_KEY, token, {
-    keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
-  });
+  try {
+    await SecureStore.setItemAsync(AUTH_TOKEN_KEY, token, {
+      keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
+    });
+  } catch {
+    throw new Error("No se pudo guardar la sesion de forma segura.");
+  }
 }
 
 export async function eliminarTokenSesion(): Promise<void> {
@@ -29,5 +37,9 @@ export async function eliminarTokenSesion(): Promise<void> {
     return;
   }
 
-  await SecureStore.deleteItemAsync(AUTH_TOKEN_KEY);
+  try {
+    await SecureStore.deleteItemAsync(AUTH_TOKEN_KEY);
+  } catch {
+    // Si el almacen seguro falla al borrar, la sesion en memoria ya se limpia en capas superiores.
+  }
 }
