@@ -81,7 +81,7 @@ public class AuthTokenService {
 			}
 
 			return Long.parseLong(partes[0]);
-		} catch (IllegalArgumentException error) {
+		} catch (IllegalArgumentException | NumberFormatException error) {
 			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Sesion no valida.");
 		}
 	}
