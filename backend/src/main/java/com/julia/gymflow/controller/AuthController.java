@@ -4,6 +4,7 @@ import com.julia.gymflow.dto.LoginRequest;
 import com.julia.gymflow.dto.LoginResponse;
 import com.julia.gymflow.dto.AuthSessionResponse;
 import com.julia.gymflow.service.AuthService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,7 +18,7 @@ public class AuthController {
 	}
 
 	@PostMapping("/login")
-	public LoginResponse login(@RequestBody LoginRequest request) {
+	public LoginResponse login(@Valid @RequestBody LoginRequest request) {
 		return authService.login(request);
 	}
 
