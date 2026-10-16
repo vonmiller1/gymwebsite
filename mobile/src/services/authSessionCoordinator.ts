@@ -9,7 +9,7 @@ const sessionExpiredListeners = new Set<SessionExpiredListener>();
 
 export function publishAuthenticatedSession(session: AuthLoginResponse) {
   pendingSession = session;
-  listeners.forEach((listener) => {
+  [...listeners].forEach((listener) => {
     void listener(session);
   });
   if (listeners.size > 0) {
@@ -31,7 +31,7 @@ export function subscribeAuthenticatedSession(listener: SessionListener) {
 }
 
 export function publishSessionExpired() {
-  sessionExpiredListeners.forEach((listener) => listener());
+  [...sessionExpiredListeners].forEach((listener) => listener());
 }
 
 export function subscribeSessionExpired(listener: SessionExpiredListener) {
