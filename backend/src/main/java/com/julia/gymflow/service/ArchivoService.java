@@ -262,7 +262,11 @@ public class ArchivoService {
     }
 
     private Path crearRutaTemporal() {
-        return directorioTemporal.resolve(UUID.randomUUID() + ".part").normalize();
+        Path ruta = directorioTemporal.resolve(UUID.randomUUID() + ".part").normalize();
+        if (!ruta.startsWith(directorioTemporal)) {
+            throw new IllegalStateException("Ruta temporal no valida.");
+        }
+        return ruta;
     }
 
     private long copiarConLimite(MultipartFile archivo, Path destino, long limite) throws IOException {
