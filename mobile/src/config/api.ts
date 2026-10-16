@@ -1,7 +1,24 @@
 import Constants from "expo-constants";
 
 const API_PORT = "8080";
-const CONFIGURED_API_URL = process.env.EXPO_PUBLIC_API_URL?.trim().replace(/\/+$/, "");
+function normalizarApiUrlConfigurada(raw?: string | null) {
+  const trimmed = raw?.trim().replace(/\/+$/, "");
+  if (!trimmed) {
+    return undefined;
+  }
+
+  try {
+    const url = new URL(trimmed);
+    if (url.protocol !== "http:" && url.protocol !== "https:") {
+      return undefined;
+    }
+    return url.toString().replace(/\/+$/, "");
+  } catch {
+    return undefined;
+  }
+}
+
+const CONFIGURED_API_URL = normalizarApiUrlConfigurada(process.env.EXPO_PUBLIC_API_URL);
 
 type ExpoConstantsWithHosts = typeof Constants & {
   manifest?: {
