@@ -51,6 +51,8 @@ public class WebConfig implements WebMvcConfigurer {
                     Object handler
             ) throws Exception {
                 response.setHeader("X-Content-Type-Options", "nosniff");
+                response.setHeader("X-Frame-Options", "DENY");
+                response.setHeader("Cache-Control", "private, max-age=3600");
                 String ruta = request.getRequestURI();
                 if (ruta.equals("/uploads/.tmp") || ruta.startsWith("/uploads/.tmp/")) {
                     response.sendError(404);
