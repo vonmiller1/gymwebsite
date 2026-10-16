@@ -1,11 +1,22 @@
 import type { EstadoPago, Pago } from "../../services/gymflowService";
 
 export function formatCurrency(amount: number, currency = "EUR") {
-  return new Intl.NumberFormat("es-ES", {
-    style: "currency",
-    currency: currency || "EUR",
-    minimumFractionDigits: 2,
-  }).format(Number.isFinite(amount) ? amount : 0);
+  const code = (currency || "EUR").trim().toUpperCase();
+  const amountSafe = Number.isFinite(amount) ? amount : 0;
+
+  try {
+    return new Intl.NumberFormat("es-ES", {
+      style: "currency",
+      currency: code,
+      minimumFractionDigits: 2,
+    }).format(amountSafe);
+  } catch {
+    return new Intl.NumberFormat("es-ES", {
+      style: "currency",
+      currency: "EUR",
+      minimumFractionDigits: 2,
+    }).format(amountSafe);
+  }
 }
 
 export function parseIsoDate(value?: string | null) {
