@@ -76,6 +76,9 @@ public class InvitacionTokenService {
 			UUID.fromString(partes[2]);
 			Long gimnasioId = Long.parseLong(partes[3]);
 			Instant fechaExpiracion = Instant.ofEpochSecond(Long.parseLong(partes[4]));
+			if (!Instant.now().isBefore(fechaExpiracion)) {
+				throw new IllegalArgumentException("Invitacion expirada.");
+			}
 			return new Claims(partes[2], gimnasioId, fechaExpiracion);
 		} catch (RuntimeException error) {
 			throw new IllegalArgumentException("La invitación no es válida.");
