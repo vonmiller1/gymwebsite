@@ -1,5 +1,12 @@
+const FECHA_KEY_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
+
 export function crearFechaLocalDesdeKey(fechaKey: string) {
-  return new Date(`${fechaKey}T00:00:00`);
+  if (!FECHA_KEY_PATTERN.test(fechaKey)) {
+    return new Date(Number.NaN);
+  }
+
+  const [year, month, day] = fechaKey.split("-").map(Number);
+  return new Date(year, month - 1, day);
 }
 
 export function crearFechaKeyLocal(fecha: Date) {
