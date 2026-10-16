@@ -26,6 +26,8 @@ import java.util.Objects;
 @Service
 public class PagoService {
 
+    private static final BigDecimal IMPORTE_MAXIMO = new BigDecimal("999999.99");
+
     private final PagoRepository pagoRepository;
     private final UsuarioRepository usuarioRepository;
     private final AuthTokenService authTokenService;
@@ -217,6 +219,9 @@ public class PagoService {
     private BigDecimal normalizarImporte(BigDecimal importe) {
         if (importe == null || importe.compareTo(BigDecimal.ZERO) <= 0) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El importe debe ser mayor que cero.");
+        }
+        if (importe.compareTo(IMPORTE_MAXIMO) > 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El importe supera el maximo permitido.");
         }
         try {
             return importe.setScale(2, RoundingMode.UNNECESSARY);
