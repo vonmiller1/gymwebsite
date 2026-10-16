@@ -11,6 +11,14 @@ export function normalizarHex(hex: string, fallback = "#000000") {
     return `#${limpio.toUpperCase()}`;
   }
 
+  if (/^[0-9a-fA-F]{3}$/.test(limpio)) {
+    const expandido = limpio
+      .split("")
+      .map((digito) => digito + digito)
+      .join("");
+    return `#${expandido.toUpperCase()}`;
+  }
+
   return fallback;
 }
 
